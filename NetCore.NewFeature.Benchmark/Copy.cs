@@ -12,7 +12,6 @@ namespace NetCore.NewFeature.Benchmark
     [CoreJob]
     [RankColumn, CategoriesColumn]
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory, BenchmarkLogicalGroupRule.ByParams)]
-    [Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
     public class Copy
     {
         private byte[] _managedDataSource;
@@ -44,7 +43,7 @@ namespace NetCore.NewFeature.Benchmark
             Marshal.FreeHGlobal(_nativeDataDestination);
         }
 
-        [BenchmarkCategory("ManagedToManaged", "Buffer_MemoryCopy"), Benchmark]
+        [BenchmarkCategory("ManagedToManaged"), Benchmark]
         public unsafe void ManagedToManaged_Buffer_MemoryCopy()
         {
             fixed (byte* pSrc = _managedDataSource, pDest = _managedDataDestination)
@@ -53,7 +52,7 @@ namespace NetCore.NewFeature.Benchmark
             }
         }
 
-        [BenchmarkCategory("ManagedToManaged", "Unsafe_CopyBlock"), Benchmark(Baseline = true)]
+        [BenchmarkCategory("ManagedToManaged"), Benchmark(Baseline = true)]
         public unsafe void ManagedToManaged_Unsafe_CopyBlock()
         {
             fixed (byte* pSrc = _managedDataSource, pDest = _managedDataDestination)
@@ -62,19 +61,19 @@ namespace NetCore.NewFeature.Benchmark
             }
         }
 
-        [BenchmarkCategory("ManagedToManaged", "Array_Copy"), Benchmark]
+        [BenchmarkCategory("ManagedToManaged"), Benchmark]
         public void ManagedToManaged_Array_Copy()
         {
             Array.Copy(_managedDataSource, _managedDataDestination, N);
         }
 
-        [BenchmarkCategory("NativeToManaged", "Marshal_Copy"), Benchmark]
+        [BenchmarkCategory("NativeToManaged"), Benchmark]
         public void NativeToManaged_Marshal()
         {
             Marshal.Copy(_nativeDataSource, _managedDataDestination, 0, N);
         }
 
-        [BenchmarkCategory("NativeToManaged", "Buffer_MemoryCopy"), Benchmark]
+        [BenchmarkCategory("NativeToManaged"), Benchmark]
         public unsafe void NativeToManaged_Buffer_MemoryCopy()
         {
             fixed (byte* pDest = _managedDataDestination)
@@ -83,7 +82,7 @@ namespace NetCore.NewFeature.Benchmark
             }
         }
 
-        [BenchmarkCategory("NativeToManaged", "Unsafe_CopyBlock"), Benchmark(Baseline = true)]
+        [BenchmarkCategory("NativeToManaged"), Benchmark(Baseline = true)]
         public unsafe void NativeToManaged_Unsafe_CopyBlock()
         {
             fixed (byte* pDest = _managedDataDestination)
@@ -92,25 +91,25 @@ namespace NetCore.NewFeature.Benchmark
             }
         }
 
-        [BenchmarkCategory("NativeToNative", "Buffer_MemoryCopy"), Benchmark]
+        [BenchmarkCategory("NativeToNative"), Benchmark]
         public unsafe void NativeToNative_Buffer_MemoryCopy()
         {
             Buffer.MemoryCopy(_nativeDataSource.ToPointer(), _nativeDataDestination.ToPointer(), N, N);
         }
 
-        [BenchmarkCategory("NativeToNative", "Unsafe_CopyBlock"), Benchmark(Baseline = true)]
+        [BenchmarkCategory("NativeToNative"), Benchmark(Baseline = true)]
         public unsafe void NativeToNative_Unsafe_CopyBlock()
         {
             Unsafe.CopyBlock(_nativeDataDestination.ToPointer(), _nativeDataSource.ToPointer(), checked((uint)N));
         }
 
-        [BenchmarkCategory("ManagedToNative", "Marshal_Copy"), Benchmark]
+        [BenchmarkCategory("ManagedToNative"), Benchmark]
         public void ManagedToNative_Marshal_Copy()
         {
             Marshal.Copy(_managedDataSource, 0, _nativeDataDestination, N);
         }
 
-        [BenchmarkCategory("ManagedToNative", "Buffer_MemoryCopy"), Benchmark]
+        [BenchmarkCategory("ManagedToNative"), Benchmark]
         public unsafe void ManagedToNative_Buffer_MemoryCopy()
         {
             fixed (byte* pSrc = _managedDataSource)
@@ -119,7 +118,7 @@ namespace NetCore.NewFeature.Benchmark
             }
         }
 
-        [BenchmarkCategory("ManagedToNative", "Unsafe_CopyBlock"), Benchmark(Baseline = true)]
+        [BenchmarkCategory("ManagedToNative"), Benchmark(Baseline = true)]
         public unsafe void ManagedToNative_Unsafe_CopyBlock()
         {
             fixed (byte* pSrc = _managedDataSource)
