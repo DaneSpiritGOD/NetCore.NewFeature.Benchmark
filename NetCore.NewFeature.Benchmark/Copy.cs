@@ -18,7 +18,7 @@ namespace NetCore.NewFeature.Benchmark
         private byte[] _managedDataDestination;
         private IntPtr _nativeDataSource;
 
-        [Params(16, 32, 64, 2048, 1024 * 1024 * 1024)]
+        [Params(16, 32, 64, 2048, 4096, 1024 * 1024, 1024 * 1024 * 1024)]
         public int N;
         private IntPtr _nativeDataDestination;
 
@@ -50,6 +50,12 @@ namespace NetCore.NewFeature.Benchmark
             {
                 Buffer.MemoryCopy(pSrc, pDest, N, N);
             }
+        }
+
+        [BenchmarkCategory("ManagedToManaged"), Benchmark]
+        public void ManagedToManaged_Buffer_BlockCopy()
+        {
+            Buffer.BlockCopy(_managedDataSource, 0, _managedDataDestination, 0, N);
         }
 
         [BenchmarkCategory("ManagedToManaged"), Benchmark(Baseline = true)]
